@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
 // eslint-disable-next-line camelcase
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import React from "react";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const inter = Inter({
+  subsets: ["latin"], // Specify the subsets you want
+  weight: ["400", "700"], // Choose font weights
+  variable: "--font-inter", // Optional: Define a CSS variable
 });
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"], // Specify the subsets you want
+  weight: ["400", "500", "600", "700"], // Choose font weights
+  variable: "--font-space-grotesk", // Optional: Define a CSS variable
 });
 
 export const metadata: Metadata = {
@@ -27,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.className} ${spaceGrotesk.variable} antialiased`}
       >
         {children}
       </body>
