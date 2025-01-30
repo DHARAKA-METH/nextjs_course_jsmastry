@@ -5,7 +5,6 @@ import type { Metadata } from "next";
 // eslint-disable-next-line camelcase
 import { Inter, Space_Grotesk } from "next/font/google";
 import { ThemeProvider } from "next-themes";
-import Navbar from "@/components/navigation/navbar";
 
 const inter = Inter({
   subsets: ["latin"], // Specify the subsets you want
@@ -43,7 +42,6 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
           {children}
         </ThemeProvider>
       </body>
