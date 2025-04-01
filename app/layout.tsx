@@ -5,6 +5,9 @@ import type { Metadata } from "next";
 // eslint-disable-next-line camelcase
 import { Inter, Space_Grotesk } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import { Toaster } from "@/components/ui/toaster";
+import { SessionProvider } from "next-auth/react";
+import { auth } from "@/auth";
 
 const inter = Inter({
   subsets: ["latin"], // Specify the subsets you want
@@ -26,13 +29,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const session =await auth()
+
   return (
     <html lang="en" suppressHydrationWarning>
+      <SessionProvider>
       <body
         className={`${inter.className} ${spaceGrotesk.variable} antialiased`}
       >
@@ -44,7 +51,9 @@ export default function RootLayout({
         >
           {children}
         </ThemeProvider>
+      <Toaster/>
       </body>
+      </SessionProvider>
     </html>
   );
 }
