@@ -1,8 +1,65 @@
+import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
 import Link from "next/link";
 
-export default function Home() {
+const questions = [
+  {
+    _id: "1",
+    title: "How to learn React?",
+    description: "I want to learn React,Can anyone help me?",
+    tags: [
+      { _id: "1", name: "React" },
+      { _id: "2", name: "JavaScript" },
+    ],
+    author: { _id: "1", name: "John Doe" },
+    upvotes: 10,
+    answers: 5,
+    views: 100,
+    createdAt: new Date(),
+  },
+  {
+    _id: "2",
+    title: "How to get started with Node.js?",
+    description:
+      "I'm new to Node.js. Any resources or tips to help me get started?",
+    tags: [
+      { _id: "1", name: "Node.js" },
+      { _id: "3", name: "JavaScript" },
+    ],
+    author: { _id: "2", name: "Jane Smith" },
+    upvotes: 15,
+    answers: 8,
+    views: 150,
+    createdAt: new Date(),
+  },
+
+  {
+    _id: "3",
+    title: "What is the difference between React and Angular?",
+    description:
+      "Can someone explain the key differences between React and Angular?",
+    tags: [
+      { _id: "1", name: "React" },
+      { _id: "4", name: "Angular" },
+    ],
+    author: { _id: "3", name: "Alice Johnson" },
+    upvotes: 20,
+    answers: 12,
+    views: 200,
+    createdAt: new Date(),
+  },
+];
+
+interface SearchParams {
+  searchParams: Promise<{ [key: string]: string }>;
+}
+
+const Home = async ({ searchParams }: SearchParams) => {
+  const { query } = await searchParams;
+  const filteredQuestions = questions.filter((question) =>
+    question.title.toLowerCase().includes(query?.toLowerCase())
+  );
   return (
     <>
       <section className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center  ">
@@ -14,14 +71,22 @@ export default function Home() {
           <Link href={ROUTES.ASK_QUESTION}>Ask a Question</Link>
         </Button>
       </section>
-      <section className="mt-11">Local Search</section>
-      HomeFilter
+      <section className="mt-11">
+        <LocalSearch
+          route="/"
+          imgSrc="/icons/search.svg"
+          placeholder="Search Questions..."
+          otherClasses="flex-1"
+        />
+      </section>
+      {/* HomeFilter */}
       <div className="mt-10 flex w-full flex-col gap-6">
-        <p>Question Card 1</p>
-        <p>Question Card 1</p>
-        <p>Question Card 1</p>
-        <p>Question Card 1</p>
+        {filteredQuestions.map((question) => (
+          <h1 key={question._id}>{question.title}</h1>
+        ))}
       </div>
     </>
   );
-}
+};
+
+export default Home;
