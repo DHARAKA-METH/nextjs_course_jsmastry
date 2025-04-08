@@ -63,7 +63,7 @@ export const HomeFilter = () => {
   };
 
   return (
-    <div className="mt-10  flex-wrap hidden gap-3 sm:flex">
+    <div className="mt-10 flex-wrap hidden gap-3 sm:flex">
       {filters.map((filter) => (
         <Button
           key={filter.name}
