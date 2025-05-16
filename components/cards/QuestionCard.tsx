@@ -19,7 +19,7 @@ interface Props {
     upvotes: number;
     answers: number;
     views: number;
-    createdAt: string;
+    createdAt: Date;
   };
 }
 
