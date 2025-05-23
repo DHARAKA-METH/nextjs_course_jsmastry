@@ -14,7 +14,7 @@ const questions = [
       { _id: "1", name: "React" },
       { _id: "2", name: "JavaScript" },
     ],
-    author: { _id: "1", name: "John Doe" ,image:"/images/profile-img.jpg"},
+    author: { _id: "1", name: "John Doe", image: "/images/profile-img.jpg" },
     upvotes: 10,
     answers: 5,
     views: 100,
@@ -29,7 +29,7 @@ const questions = [
       { _id: "1", name: "Node.js" },
       { _id: "3", name: "JavaScript" },
     ],
-    author: { _id: "2", name: "Jane Smith",image:"/images/profile-img.jpg" },
+    author: { _id: "2", name: "Jane Smith", image: "/images/profile-img.jpg" },
     upvotes: 15,
     answers: 8,
     views: 150,
@@ -45,7 +45,11 @@ const questions = [
       { _id: "1", name: "React" },
       { _id: "4", name: "Angular" },
     ],
-    author: { _id: "3", name: "Alice Johnson",image:"/images/profile-img.jpg" },
+    author: {
+      _id: "3",
+      name: "Alice Johnson",
+      image: "/images/profile-img.jpg",
+    },
     upvotes: 20,
     answers: 12,
     views: 200,
@@ -60,7 +64,11 @@ const questions = [
       { _id: "1", name: "javascript" },
       { _id: "4", name: "Angular" },
     ],
-    author: { _id: "3", name: "Alice Johnson",image:"/images/profile-img.jpg" },
+    author: {
+      _id: "3",
+      name: "Alice Johnson",
+      image: "/images/profile-img.jpg",
+    },
     upvotes: 20,
     answers: 12,
     views: 200,
@@ -68,11 +76,22 @@ const questions = [
   },
 ];
 
+// const test = async () => {
+//   try {
+//     return await api.users.getAll();
+//   } catch (error) {
+//     return handleError(error);
+//   }
+// };
+
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
 
 const Home = async ({ searchParams }: SearchParams) => {
+  // const users = await test();
+  // console.log(users);
+
   const { query = "", filter = "" } = await searchParams;
   const filteredQuestions = questions.filter((question) => {
     const matchesQuery = question.title
