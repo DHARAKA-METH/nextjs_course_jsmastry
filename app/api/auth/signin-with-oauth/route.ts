@@ -6,6 +6,7 @@ import dbconnect from "@/lib/mongoose";
 import { SignInWithOAuthSchema } from "@/lib/validation";
 import { APIErrorResponse } from "@/types/global";
 import mongoose from "mongoose";
+import { NextResponse } from "next/server";
 import slugify from "slugify";
 
 export async function POST(request: Request) {
@@ -73,6 +74,8 @@ export async function POST(request: Request) {
       );
     }
     await session.commitTransaction();
+    return NextResponse.json({
+      success: true,})
   } catch (error: unknown) {
     await session.abortTransaction();
     return handleError(error, "api") as APIErrorResponse;
