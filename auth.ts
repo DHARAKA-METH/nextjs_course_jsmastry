@@ -4,9 +4,50 @@ import Google from "next-auth/providers/google";
 import { ActionResponse } from "./types/global";
 import { api } from "./lib/api";
 import { IAccountDoc } from "./database/account.model";
+import { SignInSchema } from "./lib/validation";
+import { IUserDoc } from "./database/user.model";
+import bcrypt from "bcryptjs";
+import Credentials from "next-auth/providers/credentials";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [GITHUB, Google],
+  providers: [
+    GITHUB,
+    Google,
+    Credentials({
+      async authorize(credentials) {
+        const validatedFields = SignInSchema.safeParse(credentials);
+        if (validatedFields.success) {
+          const { email, password } = validatedFields.data;
+          const { data: existingAccount } = (await api.accounts.getByProvider(
+            email
+          )) as ActionResponse<IAccountDoc>;
+          if (!existingAccount) {
+            return null;
+          }
+
+          const { data: existingUser } = (await api.users.getById(
+            existingAccount.userId.toString()
+          )) as ActionResponse<IUserDoc>;
+          if (!existingUser) {
+            return null;
+          }
+          const isValidatePassword = await bcrypt.compare(
+            password,
+            existingAccount.password!
+          );
+          if (isValidatePassword) {
+            return {
+              id: existingUser.id,
+              name: existingUser.name,
+              email: existingUser.email,
+              image: existingUser.image,
+            };
+          }
+        }
+        return null;
+      },
+    }),
+  ],
   callbacks: {
     async session({ session, token }) {
       session.user.id = token.sub as string;
