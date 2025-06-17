@@ -5,19 +5,28 @@ import action from "../handlers/action";
 import { AskQuestionSchema } from "../validation";
 import mongoose from "mongoose";
 import { handleError } from "../handlers/error";
-import Question from "@/database/question.model";
 import Tag from "@/database/tag.model";
 import TagQuestion from "@/database/tag-question.model";
+import Question from "@/database/question.model";
 
 interface CreateQuestionParams {
   title: string;
   content: string;
   tags: string[];
 }
+interface Question {
+  title: string;
+  content: string;
+  tags: string[];
+  author: string;
+  _id: string;
+}
+
+
 
 export async function createQuestion(
   params: CreateQuestionParams
-): Promise<ActionResponse> {
+): Promise<ActionResponse<Question>> {
   const validationResult = await action({
     params,
     schema: AskQuestionSchema,
@@ -49,7 +58,7 @@ export async function createQuestion(
     for (const tag of tags) {
       const existingTag = await Tag.findOneAndUpdate(
         { name: { $regex: new RegExp(`^${tag}$`, "i") } },
-        { $setOnInsert: { name: tag }, $inc: { question } },
+        { $setOnInsert: { name: tag }, $inc: { questions:1 } },
         { upsert: true, new: true, session }
       );
 

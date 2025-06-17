@@ -11,6 +11,9 @@ interface Props {
   questions?: number;
   showCount?: boolean;
   compact?: boolean;
+  remove?: boolean;
+  isButton?: boolean;
+  handleRemove?: () => void;
 }
 
 const TagCard = ({ _id, name, questions, showCount, compact }: Props) => {
