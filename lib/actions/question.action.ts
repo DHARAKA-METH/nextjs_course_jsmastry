@@ -205,7 +205,7 @@ export async function getQuestion(
 
   if (validationResult instanceof Error) {
     return handleError(validationResult) as ErrorResponse;
-  }
+  } 
 
   const { questionId } = validationResult.params!;
 
