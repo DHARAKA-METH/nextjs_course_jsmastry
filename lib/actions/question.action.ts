@@ -1,6 +1,6 @@
 "use server";
 
-import { ActionResponse, ErrorResponse } from "@/types/global";
+import { ActionResponse, ErrorResponse, Question as QuestionsTypes } from "@/types/global";
 import action from "../handlers/action";
 import {
   AskQuestionSchema,
@@ -18,13 +18,6 @@ interface CreateQuestionParams {
   content: string;
   tags: string[];
 }
-interface Question {
-  title: string;
-  content: string;
-  tags: string[];
-  author: string;
-  _id: string;
-}
 
 interface editQuestionParams extends CreateQuestionParams {
   questionId: string;
@@ -36,7 +29,7 @@ interface getQuestionParams {
 
 export async function createQuestion(
   params: CreateQuestionParams
-): Promise<ActionResponse<Question>> {
+): Promise<ActionResponse<QuestionsTypes>> {
   const validationResult = await action({
     params,
     schema: AskQuestionSchema,
@@ -97,7 +90,7 @@ export async function createQuestion(
 
 export async function editQuestion(
   params: editQuestionParams
-): Promise<ActionResponse<Question>> {
+): Promise<ActionResponse<QuestionsTypes>> {
   const validationResult = await action({
     params,
     schema: EditQuestionSchema,
@@ -196,7 +189,7 @@ export async function editQuestion(
 
 export async function getQuestion(
   params: getQuestionParams
-): Promise<ActionResponse<Question>> {
+): Promise<ActionResponse<QuestionsTypes>> {
   const validationResult = await action({
     params,
     schema: GetQuestionSchema,
