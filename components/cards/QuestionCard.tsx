@@ -1,26 +1,13 @@
 import ROUTES from "@/constants/routes";
-import { createTimeStamp } from "@/lib/utils";
+import {getTimeStamp } from "@/lib/utils";
 import Link from "next/link";
 import React from "react";
 import TagCard from "./TagCard";
 import Metric from "../ui/Metric";
+import { Question } from "@/types/global";
 
 interface Props {
-  question: {
-    _id: string;
-    title: string;
-    description: string;
-    tags: { _id: string; name: string }[];
-    author: {
-      _id: string;
-      name: string;
-      image: string;
-    };
-    upvotes: number;
-    answers: number;
-    views: number;
-    createdAt: Date;
-  };
+  question:Question;
 }
 
 const QuestionCard = ({
@@ -31,7 +18,7 @@ const QuestionCard = ({
       <div className="flex flex-col-reverse items-start justify-between sm:flex-row">
         <div>
           <span className="sm:hidden">
-            {createTimeStamp(new Date(createdAt))}
+            {getTimeStamp(createdAt)}
           </span>
           <Link href={ROUTES.QUESTION(_id)}>
             <h3 className="sm:h3-semibold base-semibold text-dark200_light900 line-clamp-1 flex-1">
@@ -50,7 +37,7 @@ const QuestionCard = ({
           imgUrl={author.image}
           alt={author.name}
           value={author.name}
-          title={`asked ${createTimeStamp(new Date(createdAt))}`}
+          title={`asked ${getTimeStamp(new Date(createdAt))}`}
           href={ROUTES.PROFILE(author._id)}
           textStyles="body-medium text-dark400_light700"
           isAuthor
