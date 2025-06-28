@@ -1,3 +1,5 @@
+import { PaginatedSearchParams } from "./global";
+
 export interface SignInWithOAuthParams {
   provider: "github" | "google";
   providerAccountId: string;
@@ -17,4 +19,9 @@ export interface AuthCredentials {
   password: string;
 
 
+}
+
+
+interface GetTagQuestionsParams extends Omit<PaginatedSearchParams, "filter"> {
+  tagId: string;
 }
