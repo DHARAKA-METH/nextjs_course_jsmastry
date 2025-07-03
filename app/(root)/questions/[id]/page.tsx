@@ -6,6 +6,7 @@ import { RouteParams, Tag } from "@/types/global";
 import Link from "next/link";
 import React from "react";
 import TagCard from "@/components/cards/TagCard";
+import { Preview } from "@/components/editor/Preview";
 
 const sampleQuestion = {
   id: "q123",
@@ -90,7 +91,7 @@ Looking forward to your suggestions and examples!
 
 const QuestionDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
-  const { author, createAt, answers, views, tags } = sampleQuestion;
+  const { author, createdAt, answers, views, tags, content } = sampleQuestion;
   return (
     <>
       <div className="flex-start w-full flex-col">
@@ -120,7 +121,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
         <Metric
           imgUrl="/icons/clock.svg"
           alt="Clock Icon"
-          value={`asked ${getTimeStamp(new Date(createAt))}`}
+          value={`asked ${getTimeStamp(new Date(createdAt))}`}
           title=""
           textStyles="small-regular text-dark400_light700"
         />
@@ -139,7 +140,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
           textStyles="small-regular text-dark400_light700"
         />
       </div>
-      <p>Privew content</p>
+      <Preview content={content} />
       <div className="mt-8 flex flex-wrap gap-2">
         {tags.map((tag: Tag) => (
           <TagCard key={tag._id} _id={tag._id} name={tag.name} compact />
