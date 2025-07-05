@@ -7,12 +7,17 @@ import Link from "next/link";
 import React from "react";
 import TagCard from "@/components/cards/TagCard";
 import { Preview } from "@/components/editor/Preview";
-import { getQuestion } from "@/lib/actions/question.action";
+import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 
 const QuestionDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
   const { success, data: question } = await getQuestion({ questionId: id });
+
+  after(async()=>{
+    await incrementViews({questionId:id})
+  })
 
   if (!success || !question) return redirect("404");
 
