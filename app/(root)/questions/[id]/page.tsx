@@ -12,6 +12,7 @@ import { redirect } from "next/navigation";
 import { after } from "next/server";
 import AnswerForm from "@/components/form/AnswerForm";
 
+
 const QuestionDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
   const { success, data: question } = await getQuestion({ questionId: id });
@@ -21,6 +22,14 @@ const QuestionDetails = async ({ params }: RouteParams) => {
   });
 
   if (!success || !question) return redirect("404");
+
+  // const {success:ansSuccess ,data:ansData, err:ansErr } = await getAnswers({
+  //   questionId: id,
+  //   page: 1,
+  //   pageSize: 10,
+  //   filter: "latest",
+  // })
+  // console.log("ansData", ansData);
 
   const { author, createdAt, answers, views, tags, content, title } = question;
   return (
