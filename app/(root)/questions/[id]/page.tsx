@@ -11,6 +11,8 @@ import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 import AnswerForm from "@/components/form/AnswerForm";
+import AllAnswer from "@/components/answers/AllAnswer";
+import { getAnswers } from "@/lib/actions/answer.action";
 
 
 const QuestionDetails = async ({ params }: RouteParams) => {
@@ -23,14 +25,12 @@ const QuestionDetails = async ({ params }: RouteParams) => {
 
   if (!success || !question) return redirect("404");
 
-  // const {success:ansSuccess ,data:ansData, err:ansErr } = await getAnswers({
-  //   questionId: id,
-  //   page: 1,
-  //   pageSize: 10,
-  //   filter: "latest",
-  // })
-  // console.log("ansData", ansData);
-
+  const {success:areAnswerLoaded ,data:answerResult, error:answersError } = await getAnswers({
+    questionId: id,
+    page: 1,
+    pageSize: 10,
+    filter: "latest",
+  })
   const { author, createdAt, answers, views, tags, content, title } = question;
   return (
     <>
@@ -86,6 +86,15 @@ const QuestionDetails = async ({ params }: RouteParams) => {
           <TagCard key={tag._id} _id={tag._id} name={tag.name} compact />
         ))}
       </div>
+      <section className="my-5">
+        <AllAnswer
+        data ={answerResult?.answers}
+        success={areAnswerLoaded}
+        error={answersError}
+        totalAnswers={answerResult?.totalAnswers || 0}
+        
+        />
+      </section>
 
       <section className="my-5">
         <AnswerForm questionId={question._id} />
