@@ -18,7 +18,13 @@ interface Params {
   hasVotedPromise: Promise<ActionResponse<HasVotedResponse>>;
 }
 
-const Votes = ({ upvotes, downvotes, hasVotedPromise, targetId }: Params) => {
+const Votes = ({
+  upvotes,
+  downvotes,
+  hasVotedPromise,
+  targetId,
+  targetType,
+}: Params) => {
   const session = useSession();
   const userId = session.data?.user?.id;
 
@@ -40,7 +46,7 @@ const Votes = ({ upvotes, downvotes, hasVotedPromise, targetId }: Params) => {
     try {
       const result = await createVote({
         targetId,
-        targetType: "question",
+        targetType: targetType,
         voteType,
       });
 

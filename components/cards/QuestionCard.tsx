@@ -48,7 +48,7 @@ const QuestionCard = ({
             imgUrl="/icons/message.svg"
             alt="answers"
             value={answers}
-            title="votes"
+            title="answers"
             textStyles="small-medium text-dark400_light800"
           />
 
