@@ -50,4 +50,5 @@ type HasVotedParams = Pick<CreateVoteParams, "targetId" | "targetType">;
 interface HasVotedResponse {
   hasUpvoted: boolean;
   hasDownvoted: boolean;
+  
 }

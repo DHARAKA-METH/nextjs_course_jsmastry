@@ -4,7 +4,7 @@ import ROUTES from "@/constants/routes";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
 import { RouteParams, Tag } from "@/types/global";
 import Link from "next/link";
-import React from "react";
+import React, { Suspense } from "react";
 import TagCard from "@/components/cards/TagCard";
 import { Preview } from "@/components/editor/Preview";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
@@ -14,7 +14,7 @@ import AnswerForm from "@/components/form/AnswerForm";
 import AllAnswer from "@/components/answers/AllAnswer";
 import { getAnswers } from "@/lib/actions/answer.action";
 import Votes from "@/components/votes/Votes";
-
+import { hasVoted } from "@/lib/actions/vote.action";
 
 const QuestionDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
@@ -26,12 +26,22 @@ const QuestionDetails = async ({ params }: RouteParams) => {
 
   if (!success || !question) return redirect("404");
 
-  const {success:areAnswerLoaded ,data:answerResult, error:answersError } = await getAnswers({
+  const {
+    success: areAnswerLoaded,
+    data: answerResult,
+    error: answersError,
+  } = await getAnswers({
     questionId: id,
     page: 1,
     pageSize: 10,
     filter: "latest",
-  })
+  });
+
+  const hasVotedPromise = hasVoted({
+    targetId: question._id,
+    targetType: "question",
+  });
+
   const { author, createdAt, answers, views, tags, content, title } = question;
   return (
     <>
@@ -51,12 +61,15 @@ const QuestionDetails = async ({ params }: RouteParams) => {
             </Link>
           </div>
           <div className="flex justify-end">
-          <Votes
-              upvotes={question.upvotes}
-              hasupVoted={true}
-              downvotes={question.downvotes}
-              hasdownVoted={false}
-            />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Votes
+                targetType="question"
+                targetId={question._id}
+                upvotes={question.upvotes}
+                downvotes={question.downvotes}
+                hasVotedPromise={hasVotedPromise}
+              />
+            </Suspense>
           </div>
         </div>
         <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full">
@@ -94,16 +107,19 @@ const QuestionDetails = async ({ params }: RouteParams) => {
       </div>
       <section className="my-5">
         <AllAnswer
-        data ={answerResult?.answers}
-        success={areAnswerLoaded}
-        error={answersError}
-        totalAnswers={answerResult?.totalAnswers || 0}
-        
+          data={answerResult?.answers}
+          success={areAnswerLoaded}
+          error={answersError}
+          totalAnswers={answerResult?.totalAnswers || 0}
         />
       </section>
 
       <section className="my-5">
-        <AnswerForm questionId={question._id} questionTitle={question.title} questionContent ={question.content} />
+        <AnswerForm
+          questionId={question._id}
+          questionTitle={question.title}
+          questionContent={question.content}
+        />
       </section>
     </>
   );
