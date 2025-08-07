@@ -46,16 +46,12 @@ interface RouteParams {
   searchParams: Promise<Record<string, string>>;
 }
 
-
 interface PaginatedSearchParams {
-
   page?: number;
-  pageSize?: number
+  pageSize?: number;
   query?: string;
   filter?: string;
   sort?: string;
-
-
 }
 
 interface Answer {
@@ -65,4 +61,16 @@ interface Answer {
   createdAt: Date;
   upvotes: number;
   downvotes: number;
+}
+
+interface User {
+  _id: string;
+  name: string;
+  username: string;
+  email: string;
+  bio?: string;
+  image?: string;
+  location?: string;
+  portfolio?: string;
+  reputation?: number;
 }
