@@ -2,18 +2,22 @@
 
 import { toast } from "@/hooks/use-toast";
 import { toggleSaveQuestion } from "@/lib/actions/collection.action";
+import { ActionResponse } from "@/types/global";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useState } from "react";
+import { use, useState } from "react";
 
-
-const SaveQuestion = ({ questionId }: { questionId: string }) => {
+const SaveQuestion = ({
+  questionId,
+  hasSaveQuestionPromise,
+}: {
+  questionId: string;
+  hasSaveQuestionPromise: Promise<ActionResponse<{ saved: boolean }>>;
+}) => {
   const session = useSession();
   const userId = session.data?.user?.id;
 
-  const [isLoading, setIsLoading ]= useState(false);
-
-  const hasSaved = false;
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSave = async () => {
     if (isLoading) return;
@@ -29,7 +33,7 @@ const SaveQuestion = ({ questionId }: { questionId: string }) => {
         throw new Error(error?.message || "An error occurred.");
       }
       toast({
-        title: `Question ${data ?.saved? "Saved" : "Unsaved"} Successfully`,
+        title: `Question ${data?.saved ? "Saved" : "Unsaved"} Successfully`,
       });
     } catch (error) {
       toast({
@@ -42,9 +46,12 @@ const SaveQuestion = ({ questionId }: { questionId: string }) => {
     }
   };
 
+  const { data } = use(hasSaveQuestionPromise);
+  const { saved: hasSaved } = data || {};
+
   return (
     <Image
-      src={hasSaved?"/icons/star-filled.svg":"/icons/star-red.svg"}
+      src={hasSaved ? "/icons/star-filled.svg" : "/icons/star-red.svg"}
       width={18}
       height={18}
       alt="Save Question"
