@@ -1,5 +1,5 @@
 import ROUTES from "@/constants/routes";
-import {getTimeStamp } from "@/lib/utils";
+import { getTimeStamp } from "@/lib/utils";
 import Link from "next/link";
 import React from "react";
 import TagCard from "./TagCard";
@@ -7,7 +7,7 @@ import Metric from "../ui/Metric";
 import { Question } from "@/types/global";
 
 interface Props {
-  question:Question;
+  question: Question;
 }
 
 const QuestionCard = ({
@@ -17,9 +17,7 @@ const QuestionCard = ({
     <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
       <div className="flex flex-col-reverse items-start justify-between sm:flex-row">
         <div>
-          <span className="sm:hidden">
-            {getTimeStamp(createdAt)}
-          </span>
+          <span className="sm:hidden">{getTimeStamp(createdAt)}</span>
           <Link href={ROUTES.QUESTION(_id)}>
             <h3 className="sm:h3-semibold base-semibold text-dark200_light900 line-clamp-1 flex-1">
               {title}

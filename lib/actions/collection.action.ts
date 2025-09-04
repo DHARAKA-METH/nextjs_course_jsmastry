@@ -114,6 +114,7 @@ export async function getSavedQuestions(
   const validationResult = await action({
     params,
     schema: PaginatedSearchParamsSchema,
+    authorize: true,
   });
 
   if (validationResult instanceof Error) {
@@ -187,8 +188,8 @@ export async function getSavedQuestions(
       { $skip: skip },
       { $limit: limit + 1 }
     );
-    pipeline.push({ $project: { Question: 1, author: 1, _id: 1 } });
-    const isNext = totalCount.count > skip + limit;
+    pipeline.push({ $project: { question: 1, author: 1, _id: 1 } });
+    const isNext = totalCount?.count > skip + limit;
 
     const questions = await Collection.aggregate(pipeline);
     return {
