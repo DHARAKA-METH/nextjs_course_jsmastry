@@ -2,17 +2,26 @@
 
 import {
   ActionResponse,
+  Answer as AnswerType,
   ErrorResponse,
   PaginatedSearchParams,
   Question as QuestionType,
   User as UserType,
 } from "@/types/global";
 import action from "../handlers/action";
-import { GetUserSchema, PaginatedSearchParamsSchema } from "../validation";
+import {
+  GetUserAnswerSchema,
+  GetUserSchema,
+  PaginatedSearchParamsSchema,
+} from "../validation";
 import { handleError } from "../handlers/error";
 import { FilterQuery } from "mongoose";
 import { Answer, Question, User } from "@/database";
-import { GetUserParams, GetUserQuestionsParams } from "@/types/action";
+import {
+  GetUserAnswerParams,
+  GetUserParams,
+  GetUserQuestionsParams,
+} from "@/types/action";
 
 export async function getUsers(
   params: PaginatedSearchParams
@@ -152,6 +161,47 @@ export async function getUserQuestions(params: GetUserQuestionsParams): Promise<
       success: true,
       data: {
         questions: JSON.parse(JSON.stringify(questions)),
+        isNext,
+      },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+}
+
+export async function getUserAnswer(params: GetUserAnswerParams): Promise<
+  ActionResponse<{
+    answers: AnswerType[];
+    isNext: boolean;
+  }>
+> {
+  const validationResult = await action({
+    params,
+    schema: GetUserAnswerSchema,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { userId, page = 1, pageSize = 2 } = params;
+
+  const skip = (Number(page) - 1) * pageSize;
+  const limit = pageSize;
+
+  try {
+    const totalAnswers = await Question.countDocuments({ author: userId });
+
+    const answers = await Answer.find({ author: userId })
+
+      .populate("author", "_id name  image")
+      .skip(skip)
+      .limit(limit);
+    const isNext = totalAnswers > skip + answers.length;
+    return {
+      success: true,
+      data: {
+        answers: JSON.parse(JSON.stringify(answers)),
         isNext,
       },
     };

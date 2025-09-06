@@ -61,6 +61,9 @@ interface Answer {
   createdAt: Date;
   upvotes: number;
   downvotes: number;
+  question?: string;
+  containerClasses?: string;
+  showReadMore?: boolean;
 }
 
 // interface User {
@@ -76,11 +79,9 @@ interface Answer {
 // }
 
 interface Collection {
-
-  _id:string;
-  author:string |Author;
-  question:Question;
-
+  _id: string;
+  author: string | Author;
+  question: Question;
 }
 interface User {
   _id: string;
@@ -95,10 +96,8 @@ interface User {
   createdAt: Date;
 }
 
-interface BadgeCounts{
-
-  GOLD:number;
-  SILVER:number;
-  BRONZE:number;
-
+interface BadgeCounts {
+  GOLD: number;
+  SILVER: number;
+  BRONZE: number;
 }

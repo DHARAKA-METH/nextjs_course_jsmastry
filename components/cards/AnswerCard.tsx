@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import ROUTES from "@/constants/routes";
-import { getTimeStamp } from "@/lib/utils";
+import { cn, getTimeStamp } from "@/lib/utils";
 
 import { Preview } from "../editor/Preview";
 import UserAvatar from "../UserAvatar";
@@ -17,6 +17,9 @@ const AnswerCard = ({
   createdAt,
   upvotes,
   downvotes,
+  question,
+  containerClasses,
+  showReadMore = false,
 }: Answer) => {
   const hasVotedPromise = hasVoted({
     targetId: _id,
@@ -24,8 +27,8 @@ const AnswerCard = ({
   });
 
   return (
-    <article className="light-border border-b py-10">
-      <span id={JSON.stringify(_id)} className="hash-span" />
+    <article className={cn("light-border border-b py-10", containerClasses)}>
+      <span id={`answer-${_id}`} className="hash-span" />
 
       <div className="mb-5 flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
         <div className="flex flex-1 items-start gap-1 sm:items-center">
@@ -65,6 +68,14 @@ const AnswerCard = ({
       </div>
 
       <Preview content={content} />
+      {showReadMore && (
+        <Link
+          href={`/questions/${question}#answer-${_id}`}
+          className="body-semibold relative z-10 font-space-grotesk text-primary-500"
+        >
+          <p className="mt-1">Read more...</p>
+        </Link>
+      )}
     </article>
   );
 };

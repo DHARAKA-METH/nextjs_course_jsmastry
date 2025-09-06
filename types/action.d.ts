@@ -65,3 +65,9 @@ interface GetUserQuestionsParams extends Omit<PaginatedSearchParams ,"query" | "
   page?: number;
   pageSize?: number;
 }
+
+interface GetUserAnswerParams{
+  userId: string;
+  page?: number;
+  pageSize?: number;
+}
