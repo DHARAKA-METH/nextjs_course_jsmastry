@@ -71,3 +71,7 @@ interface GetUserAnswerParams{
   page?: number;
   pageSize?: number;
 }
+
+interface GetUserTagsParams {
+  userId: string;
+}
