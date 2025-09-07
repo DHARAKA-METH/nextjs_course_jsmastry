@@ -20,6 +20,7 @@ import Tag, { ITagDoc } from "@/database/tag.model";
 import TagQuestion from "@/database/tag-question.model";
 import Question, { IQuestionDoc } from "@/database/question.model";
 import { IncrementViewsParams } from "@/types/action";
+import dbconnect from "../mongoose";
 
 interface CreateQuestionParams {
   title: string;
@@ -327,6 +328,24 @@ export async function incrementViews(
     return {
       success: true,
       data: { views: question.views },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+}
+
+
+export async function getHotQuestions(): Promise<ActionResponse<QuestionsTypes[]>> {
+  try {
+    await dbconnect();
+
+    const questions = await Question.find()
+      .sort({ views: -1, upvotes: -1 })
+      .limit(5);
+
+    return {
+      success: true,
+      data: JSON.parse(JSON.stringify(questions)),
     };
   } catch (error) {
     return handleError(error) as ErrorResponse;
