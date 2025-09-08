@@ -28,6 +28,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
   if (!id) notFound();
 
   const loggedInUser = await auth();
+
   const { success, data, error } = await getUser({
     userId: id,
   });
@@ -74,11 +75,11 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
   });
 
   const { questions, isNext: hasMoreQuestions } = userQuestions!;
+
   const { answers: useranswers, isNext: hasMoreAnswers } = userAnswers!;
   const { tags: userToptags } = userTopTags!;
   const { _id, name, image, portfolio, location, createdAt, username, bio } =
     user;
-
   return (
     <>
       <section className="flex flex-col-reverse items-start justify-between sm:flex-row">
@@ -163,7 +164,13 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
               render={(questions) => (
                 <div className="mt-10 flex w-full flex-col gap-6">
                   {questions.map((question) => (
-                    <QuestionCard key={question._id} question={question} />
+                    <QuestionCard
+                      key={question._id}
+                      question={question}
+                      showActionBtns={
+                        loggedInUser?.user?.id === question.author._id
+                      }
+                    />
                   ))}
                 </div>
               )}
@@ -177,7 +184,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
               data={useranswers}
               empty={EMPTY_ANSWERS}
               render={(answers) => (
-                <div className="mt-10 flex w-full flex-col gap-6">
+                <div className="mt-10 flex w-full flex-col gap-10">
                   {answers.map((answers) => (
                     <AnswerCard
                       key={answers._id}
@@ -185,6 +192,9 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
                       content={answers.content.slice(0, 27)}
                       containerClasses="card-wrapper rounded-[10px] px-7 py-9 sm:px-11"
                       showReadMore
+                      showActionBtns={
+                        loggedInUser?.user?.id === answers.author._id
+                      }
                     />
                   ))}
                 </div>

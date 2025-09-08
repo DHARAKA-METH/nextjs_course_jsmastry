@@ -24,6 +24,7 @@ interface Question {
   answers: number;
   views: number;
   createdAt: Date;
+  showActionBtns?: boolean;
 }
 
 type ActionResponse<T = null> = {
@@ -65,6 +66,7 @@ interface Answer {
   question?: string;
   containerClasses?: string;
   showReadMore?: boolean;
+  showActionBtns?: boolean;
 }
 
 // interface User {

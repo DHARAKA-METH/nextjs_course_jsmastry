@@ -5,18 +5,21 @@ import React from "react";
 import TagCard from "./TagCard";
 import Metric from "../ui/Metric";
 import { Question } from "@/types/global";
+import EditDeleteAction from "../user/EditDeleteAction";
 
 interface Props {
   question: Question;
+  showActionBtns?: boolean;
 }
 
 const QuestionCard = ({
   question: { _id, title, tags, author, upvotes, answers, views, createdAt },
+  showActionBtns = false,
 }: Props) => {
   return (
     <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
-      <div className="flex flex-col-reverse items-start justify-between sm:flex-row">
-        <div>
+      <div className="flex flex-col-reverse items-center justify-between sm:flex-row">
+        <div className="flex-1">
           <span className="sm:hidden">{getTimeStamp(createdAt)}</span>
           <Link href={ROUTES.QUESTION(_id)}>
             <h3 className="sm:h3-semibold base-semibold text-dark200_light900 line-clamp-1 flex-1">
@@ -24,6 +27,7 @@ const QuestionCard = ({
             </h3>
           </Link>
         </div>
+        {showActionBtns && <EditDeleteAction type={"Question"} itemId={_id} />}
       </div>
       <div className="mt-3.5 flex w-full flex-wrap gap-2">
         {tags.map((tag) => (

@@ -9,6 +9,7 @@ import { Answer } from "@/types/global";
 import { hasVoted } from "@/lib/actions/vote.action";
 import { Suspense } from "react";
 import Votes from "../votes/Votes";
+import EditDeleteAction from "../user/EditDeleteAction";
 
 const AnswerCard = ({
   _id,
@@ -20,6 +21,7 @@ const AnswerCard = ({
   question,
   containerClasses,
   showReadMore = false,
+  showActionBtns = false,
 }: Answer) => {
   const hasVotedPromise = hasVoted({
     targetId: _id,
@@ -65,6 +67,7 @@ const AnswerCard = ({
             />
           </Suspense>
         </div>
+        {showActionBtns && <EditDeleteAction type={"Answer"} itemId={_id} />}
       </div>
 
       <Preview content={content} />
