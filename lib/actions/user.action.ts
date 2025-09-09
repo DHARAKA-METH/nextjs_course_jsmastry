@@ -3,6 +3,7 @@
 import {
   ActionResponse,
   Answer as AnswerType,
+  Badges,
   ErrorResponse,
   PaginatedSearchParams,
   Question as QuestionType,
@@ -23,6 +24,7 @@ import {
   GetUserQuestionsParams,
   GetUserTagsParams,
 } from "@/types/action";
+import { assignBadges } from "../utils";
 
 export async function getUsers(
   params: PaginatedSearchParams
@@ -259,6 +261,68 @@ export async function getUserTopTags(params: GetUserTagsParams): Promise<
       success: true,
       data: {
         tags: JSON.parse(JSON.stringify(tags)),
+      },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+}
+
+
+export async function getUserStats(params: GetUserParams): Promise<
+  ActionResponse<{
+    totalQuestions: number;
+    totalAnswers: number;
+    badges: Badges;
+  }>
+> {
+  const { userId } = params;
+
+  try {
+    // Questions stats
+    const [questionStats] = await Question.aggregate([
+      { $match: { author: new Types.ObjectId(userId) } },
+      {
+        $group: {
+          _id: null,
+          count: { $sum: 1 },
+          upvotes: { $sum: "$upvotes" },
+          views: { $sum: "$views" },
+        },
+      },
+    ]);
+
+    // Answers stats
+    const [answerStats] = await Answer.aggregate([
+      { $match: { author: new Types.ObjectId(userId) } },
+      {
+        $group: {
+          _id: null,
+          count: { $sum: 1 },
+          upvotes: { $sum: "$upvotes" },
+        },
+      },
+    ]);
+
+    // Assign badges
+    const badges = assignBadges({
+      criteria: [
+        { type: "ANSWER_COUNT", count: answerStats?.count ?? 0 },
+        { type: "QUESTION_COUNT", count: questionStats?.count ?? 0 },
+        {
+          type: "QUESTION_UPVOTES",
+          count: (questionStats?.upvotes ?? 0) + (answerStats?.upvotes ?? 0),
+        },
+        { type: "TOTAL_VIEWS", count: questionStats?.views ?? 0 },
+      ],
+    });
+
+    return {
+      success: true,
+      data: {
+        totalQuestions: questionStats?.count ?? 0,
+        totalAnswers: answerStats?.count ?? 0,
+        badges,
       },
     };
   } catch (error) {
