@@ -24,6 +24,7 @@ import { DeleteQuestionParams, IncrementViewsParams } from "@/types/action";
 import dbconnect from "../mongoose";
 import { Answer, Collection, Vote } from "@/database";
 import { revalidatePath } from "next/cache";
+import { cache } from "react";
 
 interface CreateQuestionParams {
   title: string;
@@ -235,7 +236,7 @@ export async function getQuestion(
   }
 }
 
-export async function getQuestions(
+export const getQuestions = cache(async function getQuestions(
   params: PaginatedSearchParams
 ): Promise<ActionResponse<{ questions: QuestionsTypes[]; isNext: boolean }>> {
   const validationResult = await action({
@@ -303,7 +304,7 @@ export async function getQuestions(
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
-}
+});
 
 export async function incrementViews(
   params: IncrementViewsParams
