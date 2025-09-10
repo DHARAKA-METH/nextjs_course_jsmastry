@@ -1,7 +1,6 @@
 import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
 import CommonFilter from "@/components/filters/CommonFilter";
-import { HomeFilter } from "@/components/filters/HomeFilter";
 import Pagination from "@/components/Pagination";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
@@ -62,7 +61,7 @@ const Home = async ({ searchParams }: SearchParams) => {
           containerClasses={"max-md:flex"}
         />
       </section>
-      <HomeFilter />
+      {/* <HomeFilter /> */}
 
       <DataRenderer
         success={success}
