@@ -8,7 +8,7 @@ import UserAvatar from "@/components/UserAvatar";
 
 const Navbar = async () => {
   const session = await auth();
-  const userId = session?.user?.id;
+ // const userId = session?.user?.id;
   return (
     <nav
       className="flex-between background-light900_dark200 fixed z-50 w-full gap-5 p-6 shadow-light-300 dark:shadow-none 
@@ -25,13 +25,13 @@ const Navbar = async () => {
           Dev<span className="text-primary-500">Flow</span>
         </p>
       </Link>
-      <p>Global Search</p>
+      {/* <p>Global Search</p> */}
       <div className="flex-between gap-5">
         <Theme />
         {session?.user?.id && (
           <UserAvatar
             id={session.user.id}
-            name={session.user.name}
+            name={session.user.name ?? "Anonymous"}
             imageUrl={session.user?.image}
           />
         )}

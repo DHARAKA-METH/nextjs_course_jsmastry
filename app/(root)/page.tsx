@@ -9,7 +9,6 @@ import { HomePageFilters } from "@/constants/filters";
 import ROUTES from "@/constants/routes";
 import { EMPTY_QUESTION } from "@/constants/states";
 import { getQuestions } from "@/lib/actions/question.action";
-import dbconnect from "@/lib/mongoose";
 import Link from "next/link";
 
 interface SearchParams {
@@ -17,7 +16,7 @@ interface SearchParams {
 }
 
 const Home = async ({ searchParams }: SearchParams) => {
-  dbconnect();
+  // dbconnect();
 
   const { page, pageSize, query, filter } = await searchParams;
 
