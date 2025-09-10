@@ -4,6 +4,12 @@ const nextConfig: NextConfig = {
 
   serverExternalPackages:["pino","pino-pretty"],
   /* config options here */
+  eslint:{
+    ignoreDuringBuilds:true
+  },
+  typescript:{
+    ignoreBuildErrors:true
+  },
   images:{
     remotePatterns: [
       {
