@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 import React from "react";
 
 
-const NavLinks = ({ isMobileNav = false ,userId? }: { isMobileNav?: boolean ,userId?:string}) => {
+const NavLinks = ({ isMobileNav = false, userId }: { isMobileNav?: boolean; userId?: string }) => {
   const pathname = usePathname();
  
 
